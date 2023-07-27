@@ -39,8 +39,6 @@ const NODE_SOAP_PARSED_TYPES: { [type: string]: string } = {
     decimal: "number",
     bool: "boolean",
     boolean: "boolean",
-    dateTime: "Date",
-    date: "Date",
 };
 
 /**
