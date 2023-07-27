@@ -166,12 +166,14 @@ function parseDefinition(
                 } else {
                     if (typeof type === "string") {
                         // primitive type
+                        const typeTokens = type.split(":");
+                        const typeStrippedNamespace = typeTokens.length > 1 ? typeTokens[1] : typeTokens[0];
                         definition.properties.push({
                             kind: "PRIMITIVE",
                             name: propName,
                             sourceName: propName,
                             description: type,
-                            type: "string",
+                            type: NODE_SOAP_PARSED_TYPES[typeStrippedNamespace] || "string",
                             isArray: false,
                         });
                     } else if (type instanceof ComplexTypeElement) {
