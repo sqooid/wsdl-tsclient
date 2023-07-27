@@ -29,6 +29,20 @@ function findReferenceDefiniton(visited: Array<VisitedDefinition>, definitionPar
     return visited.find((def) => def.parts === definitionParts);
 }
 
+const NODE_SOAP_PARSED_TYPES: { [type: string]: string } = {
+    int: "number",
+    integer: "number",
+    short: "number",
+    long: "number",
+    double: "number",
+    float: "number",
+    decimal: "number",
+    bool: "boolean",
+    boolean: "boolean",
+    dateTime: "Date",
+    date: "Date",
+};
+
 /**
  * parse definition
  * @param parsedWsdl context of parsed wsdl
@@ -90,12 +104,14 @@ function parseDefinition(
                     // Array of
                     if (typeof type === "string") {
                         // primitive type
+                        const typeTokens = type.split(":");
+                        const typeStrippedNamespace = typeTokens.length > 1 ? typeTokens[1] : typeTokens[0];
                         definition.properties.push({
                             kind: "PRIMITIVE",
                             name: stripedPropName,
                             sourceName: propName,
                             description: type,
-                            type: "string",
+                            type: NODE_SOAP_PARSED_TYPES[typeStrippedNamespace] || "string",
                             isArray: true,
                         });
                     } else if (type instanceof ComplexTypeElement) {
